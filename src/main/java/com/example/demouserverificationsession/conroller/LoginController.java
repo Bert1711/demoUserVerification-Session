@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class LoginController {
 
-    private final LoginProcessor processor;
+    private final LoginProcessor loginProcessor;
     @Autowired
-    public LoginController(LoginProcessor processor) {
-        this.processor = processor;
+    public LoginController(LoginProcessor loginProcessor) {
+        this.loginProcessor = loginProcessor;
     }
 
     @GetMapping("/")
@@ -27,11 +27,11 @@ public class LoginController {
             @RequestParam String password,
             Model model
     ) {
-        processor.setPassword(password);
-        processor.setUsername(username);
-        if (processor.login()) {
-
-            model.addAttribute("message", "Вы вошли в систему.");
+        loginProcessor.setPassword(password);
+        loginProcessor.setUsername(username);
+        boolean loggedIn = loginProcessor.login();
+        if (loggedIn) {
+            return "redirect:/main";
         } else {
             model.addAttribute("message", "Ошибка входа!");
         }
